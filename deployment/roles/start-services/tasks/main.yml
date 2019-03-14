@@ -1,0 +1,7 @@
+---
+- name: start services
+  service:
+    name: '{{ item }}'
+    state: started
+  ignore_errors: yes
+  with_items: '{{ services }}'

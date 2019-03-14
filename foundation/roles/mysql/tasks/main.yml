@@ -1,0 +1,21 @@
+- name: Add MySql community repository
+  yum:
+    name: 'http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm'
+    state: present
+
+- name: Install mysql-server
+  yum:
+    name: mysql-server
+    state: latest
+  register: mysql_installed
+
+- name: Install mysql
+  yum:
+    name: mysql
+    state: latest
+  when: mysql_installed is changed
+
+- service:
+    name: mysqld
+    enabled: yes
+    state: started

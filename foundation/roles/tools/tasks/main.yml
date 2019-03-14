@@ -1,0 +1,13 @@
+- name: Install epel
+  yum:
+    name: epel-release
+
+- name: Install ius
+  yum:
+    name: https://centos7.iuscommunity.org/ius-release.rpm
+    state: present
+
+- name: Install tools
+  yum:
+    name: ['unzip', 'wget', 'vim', 'htop', 'net-tools', 'nmap', 'jq', 'git', 'nano']
+    state: present

@@ -1,0 +1,9 @@
+[Unit]
+Description={{ service_name }} service
+
+[Service]
+ExecStart=/usr/bin/java -Dloader.path=config/ -jar {{ app_jar_path }}
+User=admin
+
+[Install]
+WantedBy=multi-user.target

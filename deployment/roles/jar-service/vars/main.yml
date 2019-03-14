@@ -1,0 +1,9 @@
+jar_name: '{{ service_name }}-{{ service_version }}.jar'
+jar_location: '~/.m2/repository/{{ artifact_dir }}/{{ service_name }}/{{ service_version }}/{{ jar_name }}'
+
+app_dir: '/opt/dmms/{{ service_name }}'
+app_jar_path: '{{ app_dir }}/{{ service_name }}.jar'
+
+# service_name
+# service_version
+# artifact_dir (cf/dmms/app)

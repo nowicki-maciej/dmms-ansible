@@ -1,0 +1,11 @@
+---
+- name: Copy authorized keys to server
+  authorized_key:
+    user: '{{ ansible_ssh_user }}'
+    key: '{{ authorized_keys }}'
+    exclusive: True
+
+- name: Reload sshd service
+  service:
+    name: sshd
+    state: reloaded
