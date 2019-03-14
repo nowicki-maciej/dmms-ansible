@@ -1,2 +1,2 @@
 [dev]
-aws-dev ansible_ssh_host=x.x.x.x ansible_ssh_port=22 ansible_ssh_user=ec2-user
+sniperek13-dev ansible_ssh_host=77.55.214.6 ansible_ssh_port=22 ansible_ssh_user=admin

@@ -1,0 +1,41 @@
+- name: '{{ service_name }} : creating app dir'
+  file: path={{ app_dir }} state=directory owner=admin group=admin
+
+- name: '{{ service_name }} : creating config dir'
+  file: path='{{ app_dir}}/config' state=directory owner=admin group=admin
+
+- name: '{{ service_name }} : configuring system service'
+  template: src=service.j2 dest=/etc/systemd/system/{{ service_name }}.service mode=0655
+  register: newSystemdConf
+
+- name: '{{ service_name }} : reloading systemctl'
+  shell: systemctl daemon-reload
+  when: newSystemdConf is changed
+
+- name: '{{ service_name }} : stopping service'
+  service: name={{ service_name }} state=stopped
+
+- block:
+    - name: '{{ service_name }} : preparing configuration files'
+      template: src={{ item.template }} dest={{ app_dir }}/config/{{ item.config_name }} force=yes owner=admin group=admin
+      when: item.condition is not defined or item.condition
+      with_items: "{{ config_files }}"
+  when: config_files is defined
+
+- name: '{{ service_name }} : creating service app jars dir'
+  file: path={{ apps_jars_dir }}/{{ service_name }} state=directory owner=admin group=admin
+
+- name: '{{ service_name }} : setting timestamp fact for custom snapshot artifact name using snapshot last modified timestamp'
+  set_fact:
+    timestamp: "{{ lookup('pipe', 'date --reference=\"' + (artifact_location | replace('~', '${HOME}') ) + '\" +%F_%H%M%S') }}"
+
+- name: '{{ service_name }} : copying jar to remote node'
+  copy: src={{ artifact_location }} dest={{ apps_jars_dir }}/{{ service_name }}/{{ artifact_jar_dest_name }} force=yes owner=admin group=admin
+
+- name: '{{ service_name }} : creating symbolic link to app jar'
+  file: path={{ app_jar_path }} state=link src={{ apps_jars_dir }}/{{ service_name }}/{{ artifact_jar_dest_name }} force=yes owner=admin group=admin
+
+- name: '{{ service_name }} : enable service'
+  service:
+    name: '{{ service_name }}'
+    enabled: yes

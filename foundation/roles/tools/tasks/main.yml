@@ -1,0 +1,23 @@
+- name: Installing epel for extra packages (ansible)
+  yum:
+    name: epel-release
+  tags: online
+
+- name: install development tools
+  yum:
+    name: '@Development'
+    state: present
+  ignore_errors: yes
+  tags: online
+
+- name: install ius
+  yum:
+    name: https://centos7.iuscommunity.org/ius-release.rpm
+    state: present
+  tags: online
+
+- name: install tools
+  yum:
+    name: ['unzip', 'wget', 'vim', 'htop', 'net-tools', 'nmap', 'jq', 'git']
+    state: present
+  tags: online

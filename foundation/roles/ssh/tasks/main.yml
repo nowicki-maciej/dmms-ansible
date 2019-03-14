@@ -1,0 +1,11 @@
+---
+- name: Add authorized users RSA keys to remote host
+  authorized_key:
+    user: '{{ ansible_ssh_user }}'
+    key: '{{ ssh_authorized_keys }}'
+    exclusive: True
+
+- name: Reload sshd
+  service:
+    name: sshd
+    state: reloaded

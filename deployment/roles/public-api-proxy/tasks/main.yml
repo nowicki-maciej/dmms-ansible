@@ -1,0 +1,12 @@
+- name: '{{ service_name }} : configuring public API proxy'
+  template: src=service.conf.j2 dest=/etc/nginx/conf.d/{{ service_name }}.conf owner=nginx group=nginx mode=0400
+
+- name: '{{ service_name }} : opening firewall port "{{ http_port }}" for public API'
+  tags: firewall-ports
+  include_role:
+    name: firewalld-open-port
+  vars:
+    port_to_open: '{{ http_port }}'
+
+- name: 'reloading proxy server'
+  service: name=nginx state=reloaded

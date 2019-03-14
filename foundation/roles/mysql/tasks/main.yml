@@ -1,0 +1,24 @@
+- name: Mysql Repo
+  yum:
+    name: 'http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm'
+    state: present
+  tags: online
+
+- name: Install mysql-server
+  yum:
+    name: mysql-server
+    state: latest
+  register: installedMysql
+  tags: online
+
+- name: Install mysql
+  yum:
+    name: mysql
+    state: latest
+  when: installedMysql is changed
+  tags: online
+
+- service: name=mysqld enabled=yes state=started
+
+- service: name=mysqld state=stopped
+  when: installedMysql is changed

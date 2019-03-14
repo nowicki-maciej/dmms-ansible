@@ -1,0 +1,57 @@
+- name: Copying scripts to server
+  copy:
+    src: "../files/check-java-version.sh"
+    dest: "{{ jdk_install_dir }}/"
+    mode: "a+x"
+
+- name: Checking if specific version of Oracle JDK is installed
+  shell: LC_ALL="en_US.UTF-8"  {{ jdk_install_dir }}/check-java-version.sh  "{{ jdk_version }}"
+  register: jdk_info
+  changed_when: false
+  failed_when: jdk_info.rc > 0
+
+- block:
+  - name: Create Java installation dir
+    file:
+      state: directory
+      path: '{{ jdk_install_dir }}'
+      owner: root
+      group: root
+      recurse: yes
+
+  - name: Check whether JDK archive is present
+    stat:
+      path: "{{ jdk_install_dir }}/{{ jdk_file }}"
+    register: jdk_archive_file_check
+
+
+  - name: Downloading Oracle JDK archive from official site
+    tags: online
+    get_url:
+      url:     "{{ jdk_official_url }}/{{ jdk_file }}.tar.gz"
+      headers:
+        Cookie: 'oraclelicense=accept-securebackup-cookie'
+      dest:    "{{ jdk_install_dir }}/{{ jdk_file }}.tar.gz"
+    when: not jdk_archive_file_check.stat.exists
+
+  - name: Unpacking Oracle JDK archive
+    unarchive:
+      src: "{{ jdk_install_dir }}/{{ jdk_file }}.tar.gz"
+      dest: "{{ jdk_install_dir }}"
+      copy: no
+
+  - name: Adding alternatives link for "java"
+    alternatives:
+      name: java
+      link: /usr/bin/java
+      path: "{{ jdk_install_dir }}/jdk{{ jdk_version }}/bin/java"
+
+  - name: Adding alternatives link for "keytool"
+    alternatives:
+      name: keytool
+      link: /usr/bin/keytool
+      path: "{{ jdk_install_dir }}/jdk{{ jdk_version }}/bin/keytool"
+
+  - name: Removing temporary downloaded files
+    file: path="{{ jdk_install_dir }}/{{ jdk_file }}.tar.gz" state=absent
+  when: jdk_info.stdout == "not_found"

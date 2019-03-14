@@ -1,0 +1,10 @@
+[Unit]
+Description={{ service_name }} service
+After=mysql.service
+
+[Service]
+ExecStart=/usr/bin/java -Dspring.main.allow-bean-definition-overriding=true -Dloader.path=lib/,config/ -jar {{ app_jar_path }}
+User=admin
+
+[Install]
+WantedBy=multi-user.target

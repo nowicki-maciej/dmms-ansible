@@ -1,0 +1,47 @@
+- name: openssl
+  yum:
+    name: openssl
+    state: latest
+  tags: online
+
+- name: Installing NGINX
+  yum:
+    name: nginx
+    state: latest
+  tags: online
+
+- name: Create directory for ssl
+  file: path=/etc/nginx/ssl state=directory owner=root group=root
+
+- name: remove example config
+  file: path=/etc/nginx/conf.d/example_ssl.conf state=absent
+
+- name: remove example ssl config
+  file: path=/etc/nginx/conf.d/default.conf state=absent
+
+- block:
+  - name: Check if nginx cert and key are present in /etc/nginx/ssl/
+    find:
+      paths: /etc/nginx/ssl/
+      use_regex: yes
+      patterns: '(nginx.crt|nginx.key)'
+    register: stat_result
+
+  - set_fact:
+      nginx_certs_arleady_generated: '{{ stat_result.matched == 2}}'
+
+  - block:
+    - name: ssl certifcate
+      copy: content={{ nginx_cert }} dest=/etc/nginx/ssl/nginx.crt force=yes owner=root group=root
+
+    - name: private key
+      copy: content={{ nginx_private_key }} dest=/etc/nginx/ssl/nginx.key force=yes owner=root group=root
+
+- name: DHE parameter
+  shell: '[ -f /etc/nginx/ssl/dhparam.pem ] || openssl dhparam -out /etc/nginx/ssl/dhparam.pem 1024'
+
+- name: Starting NGINX
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

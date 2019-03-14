@@ -1,0 +1,13 @@
+jdk_os: linux
+jdk_arch: "{{ 'i586'  if ansible_architecture == 'i386' else 'x64' }}"
+jdk_file: "jdk-{{ jdk_main_version }}u{{ jdk_subversion }}-{{ jdk_os }}-{{ jdk_arch }}"
+jdk_install_dir: /opt/java
+jdk_version: "1.{{ jdk_main_version }}.0_{{ jdk_subversion }}"
+jdk_main_version: 8
+jdk_subversion: 131
+jdk_build: 11
+jdk_download_hash: d54c1d3a095b4ff2b6607d096fa80163
+
+jdk_version_detail: "{{ jdk_main_version }}u{{ jdk_subversion }}-b{{ jdk_build }}"
+jdk_download_url: "http://download.oracle.com/otn-pub/java/jdk"
+jdk_official_url: '{{ jdk_download_url }}/{{ jdk_version_detail }}/{{ jdk_download_hash }}'
