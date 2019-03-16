@@ -2,6 +2,7 @@
   roles:
     - { role: ssh, become: yes }
     - { role: tools, become: yes }
+    - { role: firewalld, become: yes }
     - { role: mysql, become: yes }
     - { role: nginx, become: yes }
     - { role: java, become: yes }

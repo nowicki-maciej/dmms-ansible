@@ -1,0 +1,24 @@
+- name: Install firewalld
+  yum:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld is running
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Open ports in firewalld
+  firewalld:
+    port: '{{ item }}/tcp'
+    permanent: true
+    state: enabled
+  with_items:
+    - 80
+    - 443
+
+- name: Reload firewalld
+  service:
+    name: firewalld
+    state: reloaded
