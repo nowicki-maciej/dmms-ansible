@@ -1,0 +1,8 @@
+- include_tasks: 'create-user.yml'
+
+- name: Change root password
+  user:
+    name: root
+    password: '{{ root_dest_password | password_hash("sha512") }}'
+
+- include_tasks: 'repair-ssh.yml'
