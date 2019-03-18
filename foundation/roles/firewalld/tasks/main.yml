@@ -9,15 +9,6 @@
     state: started
     enabled: yes
 
-- name: Open ports in firewalld
-  firewalld:
-    port: '{{ item }}/tcp'
-    permanent: true
-    state: enabled
-  with_items:
-    - 80
-    - 443
-
 - name: Reload firewalld
   service:
     name: firewalld
