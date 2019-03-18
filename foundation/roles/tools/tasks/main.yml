@@ -9,5 +9,5 @@
 
 - name: Install tools
   yum:
-    name: ['unzip', 'wget', 'vim', 'htop', 'net-tools', 'nmap', 'jq', 'git', 'nano']
+    name: ['zip', 'unzip', 'wget', 'vim', 'htop', 'net-tools', 'nmap', 'jq', 'git', 'nano']
     state: present

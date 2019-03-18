@@ -1,0 +1,30 @@
+- name: Repair freezing ssh sessions
+  become: yes
+  lineinfile:
+    path: '/etc/ssh/sshd_config'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.replacement }}'
+  with_items:
+    -
+      regexp: '#ClientAliveInterval 0'
+      replacement: 'ClientAliveInterval 60'
+    -
+      regexp: '#TCPKeepAlive yes'
+      replacement: 'TCPKeepAlive yes'
+    -
+      regexp: '#ClientAliveCountMax 3'
+      replacement: 'ClientAliveCountMax 10000'
+    -
+      regexp: 'PasswordAuthentication yes'
+      replacement: 'PasswordAuthentication no'
+    -
+      regexp: 'UsePAM yes'
+      replacement: 'UsePAM no'
+    -
+      regexp: 'PermitRootLogin yes'
+      replacement: 'PermitRootLogin no'
+
+- name: Restart sshd service
+  service:
+    name: sshd
+    state: restarted

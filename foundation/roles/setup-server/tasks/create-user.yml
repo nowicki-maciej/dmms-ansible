@@ -1,0 +1,30 @@
+- name: Create user
+  user:
+    name: '{{ username }}'
+    password: '{{ password | password_hash("sha512") }}'
+
+- name: Make sure 'wheel' group exists
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add user users to wheel group
+  user:
+    name: '{{ username }}'
+    groups: wheel
+    append: yes
+    state: present
+    createhome: yes
+
+- name: Set up authorized keys for
+  authorized_key: user={{ username }} key="{{ item }}"
+  with_file:
+    - '~/.ssh/id_rsa.pub'

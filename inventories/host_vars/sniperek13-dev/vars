@@ -1,0 +1,5 @@
+letsencrypt_email: 'sniperek13@gmail.com'
+#domain_name: 'dev.dmms.cf'
+#domain_name: 'dev.dmms.ml'
+domain_name: 'dev.atreses.pl'
+dmms_user: 'admin'
