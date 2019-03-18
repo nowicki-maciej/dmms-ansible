@@ -20,7 +20,6 @@
 
 - name: '{{ service_name }}: reload firewall'
   service: name=firewalld state=reloaded
-  when: ports_added is changed
 
 - name: '{{ service_name }}: reload NGINX'
   service:

@@ -1,0 +1,50 @@
+- name: Create web app dir
+  file:
+    path: '{{ web_app_dir }}'
+    state: directory
+    owner: 'admin'
+    group: 'admin'
+
+- name: Copy web app to server
+  copy:
+    src: '~/dmms_tmp/{{ web_app_name }}.zip'
+    dest: '{{ web_app_dir }}/{{ web_app_name }}.zip'
+    owner: 'admin'
+    group: 'admin'
+
+- name: Unarchive web app
+  unarchive:
+    remote_src: true
+    src: '{{ web_app_dir }}/{{ web_app_name }}.zip'
+    dest: '{{ web_app_dir }}/'
+
+- name: Remove web app archive
+  file:
+    path: '{{ web_app_dir }}/{{ web_app_name }}.zip'
+    state: absent
+
+- name: Open ports in firewalld
+  firewalld:
+    port: '443/tcp'
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: Create web app NGINX config
+  template:
+    src: 'web-ui.conf.j2'
+    dest: '/etc/nginx/conf.d/web-ui.conf'
+    owner: 'admin'
+    group: 'admin'
+    mode: 0644
+
+- name: Reload NGINX
+  service:
+    name: nginx
+    state: reloaded
+
+
