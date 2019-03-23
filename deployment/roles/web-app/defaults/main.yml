@@ -1,0 +1,4 @@
+web_app_server_ip: '127.0.0.1'
+web_app_server_port: '7000'
+web_app_db_name: 'dmms'
+service_name: 'web-app'

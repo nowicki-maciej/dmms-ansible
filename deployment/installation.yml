@@ -1,3 +1,4 @@
 - hosts: all
   roles:
-    - { role: web-ui, become: yes }
+    - { role: web-ui, become: yes, tags: web-ui }
+    - { role: web-app, become: yes, tags: web-app }

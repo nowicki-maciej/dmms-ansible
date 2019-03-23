@@ -2,7 +2,7 @@
 Description={{ service_name }} service
 
 [Service]
-ExecStart=/usr/bin/java -Dloader.path=config/ -jar {{ app_jar_path }}
+ExecStart=/usr/bin/java -Dloader.path=config/,{{ app_dir }}/config/ -jar {{ app_jar_path }}
 User=admin
 
 [Install]
