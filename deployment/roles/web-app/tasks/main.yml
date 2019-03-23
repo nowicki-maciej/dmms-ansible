@@ -1,0 +1,45 @@
+- import_role:
+    name: stop-services
+  vars:
+    services:
+      - 'web-app'
+
+- name: Create DB for DMMS app
+  mysql_db:
+    name: '{{ web_app_db_name }}'
+    state: present
+
+- block:
+    - name: Remove default MySQL user
+      mysql_user:
+        name: ''
+        host: localhost
+        state: absent
+
+    - name: Create DB user for DMMS app
+      mysql_user:
+        name: '{{ web_app_db_user }}'
+        password: '{{ web_app_db_password }}'
+        priv: '*.*:ALL'
+        state: present
+
+- import_role:
+    name: jar-service
+  vars:
+    service_name: 'web-app'
+    service_version: '1.0.0-SNAPSHOT'
+    artifact_dir: 'cf/dmms/app'
+    config_files:
+      - template: 'web-app.properties.j2'
+        config_name: 'web-app.properties'
+
+- import_role:
+    name: logback
+  vars:
+    service_name: 'web-app'
+
+- import_role:
+    name: start-services
+  vars:
+    services:
+      - 'web-app'

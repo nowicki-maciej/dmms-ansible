@@ -1,0 +1,7 @@
+- name: '{{ service_name }}: copy logback file'
+  template:
+    src: 'logback.xml.j2'
+    dest: '{{ app_dir }}/config/logback.xml'
+    force: yes
+    owner: admin
+    group: admin
