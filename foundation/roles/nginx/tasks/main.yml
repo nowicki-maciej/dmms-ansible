@@ -1,3 +1,14 @@
+- name: Install SELinux minimum policy
+  yum:
+    name: selinux-policy-minimum
+    state: present
+  tags: online
+
+- name: Set SELinux config permissive
+  selinux:
+    policy: minimum
+    state: permissive
+
 - name: Install NGINX
   include_role:
     name: nginx-installation
