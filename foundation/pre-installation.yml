@@ -8,6 +8,3 @@
       ansible_ssh_pass: '{{ root_original_password }}'
       username: '{{ dmms_user }}'
       password: '{{ dmms_user_password }}'
-
-- hosts: all
-  roles:
