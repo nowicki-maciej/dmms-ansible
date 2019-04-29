@@ -3,3 +3,5 @@ letsencrypt_email: 'sniperek13@gmail.com'
 #domain_name: 'dev.dmms.ml'
 domain_name: 'dev.atreses.pl'
 dmms_user: 'admin'
+
+web_app_version: '1.0.0-SNAPSHOT'

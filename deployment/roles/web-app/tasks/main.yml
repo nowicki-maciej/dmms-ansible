@@ -27,7 +27,7 @@
     name: jar-service
   vars:
     service_name: 'web-app'
-    service_version: '1.0.0-SNAPSHOT'
+    service_version: '{{ web_app_version }}'
     artifact_dir: 'cf/dmms/app'
     config_files:
       - template: 'web-app.properties.j2'
