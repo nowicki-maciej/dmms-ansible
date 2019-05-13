@@ -27,7 +27,8 @@
     name: firewalld
     state: restarted
 
-- include_tasks: 'cert.yml'
+- import_tasks: 'cert.yml'
+  when: '{{ install_cert }}'
 
 - name: Remove default NGINX service
   file:

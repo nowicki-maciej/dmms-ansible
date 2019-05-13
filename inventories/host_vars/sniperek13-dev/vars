@@ -1,3 +1,4 @@
+install_cert: true
 letsencrypt_email: 'sniperek13@gmail.com'
 #domain_name: 'dev.dmms.cf'
 #domain_name: 'dev.dmms.ml'

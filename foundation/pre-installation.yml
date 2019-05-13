@@ -4,7 +4,7 @@
     -
       role: setup-server
       become: yes
-      ansible_ssh_user: root
+      ansible_ssh_user: '{{ pre_install_ssh_user | default("root") }}'
       ansible_ssh_pass: '{{ root_original_password }}'
       username: '{{ dmms_user }}'
       password: '{{ dmms_user_password }}'
