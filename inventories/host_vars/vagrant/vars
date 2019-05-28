@@ -1,0 +1,9 @@
+install_cert: false
+letsencrypt_email: 'sniperek13@gmail.com'
+#domain_name: 'dev.dmms.cf'
+#domain_name: 'dev.dmms.ml'
+domain_name: 'localhost'
+dmms_user: 'admin'
+pre_install_ssh_user: 'vagrant'
+
+web_app_version: '1.0.0-SNAPSHOT'
